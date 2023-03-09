@@ -95,59 +95,65 @@ class NoteWidgetState extends State<NoteWidget> {
         }
       },
       onTap: () => setState(() => expanded = !expanded),
-      child: Container(
-        decoration: BoxDecoration(
-          color: CupertinoColors.white,
-          border: Border.all(color: CupertinoColors.opaqueSeparator),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 2),
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment:
-              note.done ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 300),
+        alignment: Alignment.topCenter,
+        child: Container(
+          decoration: BoxDecoration(
+            color: CupertinoColors.white,
+            border: Border.all(color: CupertinoColors.opaqueSeparator),
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 2),
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            crossAxisAlignment: note.done
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      note.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 20,
+                        decoration:
+                            note.done ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                    if (!note.done)
+                      Text(
+                        expanded
+                            ? note.content
+                            : note.content.replaceAll('\n\t\r', ' '),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: expanded ? 999 : null,
+                      ),
+                  ],
+                ),
+              ),
+              Row(
                 children: [
-                  Text(
-                    note.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 20,
-                      decoration: note.done ? TextDecoration.lineThrough : null,
+                  CupertinoButton(
+                    onPressed: () => setState(() {
+                      note.done = !note.done;
+                    }),
+                    child: Icon(
+                      CupertinoIcons.check_mark,
+                      color: note.done ? CupertinoColors.opaqueSeparator : null,
                     ),
                   ),
-                  if (!note.done)
-                    Text(
-                      expanded
-                          ? note.content
-                          : note.content.replaceAll('\n\t\r', ' '),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: expanded ? 999 : null,
-                    ),
+                  CupertinoButton(
+                    onPressed: onDelete,
+                    child: const Icon(CupertinoIcons.delete_solid),
+                  ),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                CupertinoButton(
-                  onPressed: () => setState(() {
-                    note.done = !note.done;
-                  }),
-                  child: Icon(
-                    CupertinoIcons.check_mark,
-                    color: note.done ? CupertinoColors.opaqueSeparator : null,
-                  ),
-                ),
-                CupertinoButton(
-                  onPressed: onDelete,
-                  child: const Icon(CupertinoIcons.delete_solid),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
