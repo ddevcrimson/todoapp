@@ -103,6 +103,8 @@ class NoteWidgetState extends State<NoteWidget> {
         margin: const EdgeInsets.symmetric(vertical: 2),
         padding: const EdgeInsets.all(10),
         child: Row(
+          crossAxisAlignment:
+              note.done ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
